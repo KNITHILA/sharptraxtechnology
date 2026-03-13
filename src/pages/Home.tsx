@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import emailjs from "@emailjs/browser";
 const solutions = [
   {
     title: "Robotic Automation",
@@ -100,6 +101,49 @@ export default function App() {
   }>({});
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
+  const form = useRef<HTMLFormElement>(null);
+  const [isSending, setIsSending] = useState(false);
+
+  const handleQuoteSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const errors = validateQuoteForm();
+    setValidationErrors(errors);
+
+    // If no errors, proceed to send email
+    if (Object.keys(errors).length === 0) {
+      setIsSending(true);
+
+      if (form.current) {
+        emailjs
+          .sendForm(
+            "service_67r7kfg", // Your Service ID
+            "template_xwnafxs", // Your Template ID
+            form.current,
+            "9bJ_hqjsB63RMeUH0", // Your Public Key
+          )
+          .then(() => {
+            alert("Enquiry sent! We will get back to you soon.");
+            form.current?.reset();
+            // Clear state
+            setQuoteFormData({
+              customerName: "",
+              customerEmail: "",
+              customerCity: "",
+              customerPhone: "",
+              projectMessage: "",
+            });
+          })
+          .catch((error) => {
+            alert("Oops! Something went wrong.");
+            console.error("Error:", error.text);
+          })
+          .finally(() => {
+            setIsSending(false);
+          });
+      }
+    }
+  };
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -148,18 +192,6 @@ export default function App() {
       errors.projectMessage = "Message is required";
 
     return errors;
-  };
-
-  const handleQuoteSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const errors = validateQuoteForm();
-    setValidationErrors(errors);
-
-    if (Object.keys(errors).length === 0) {
-      alert("Quote request submitted successfully!");
-      console.log(quoteFormData);
-    }
   };
 
   const toggle = (index: number) => {
@@ -513,10 +545,6 @@ export default function App() {
                   </h3>
 
                   <p className="text-gray-600 text-sm mb-4">{item.desc}</p>
-
-                  <button className="border border-red-400 text-red-500 px-4 py-1 rounded-full text-sm hover:bg-red-50">
-                    Learn More
-                  </button>
                 </div>
 
                 {/* Image */}
@@ -531,7 +559,10 @@ export default function App() {
 
           {/* Bottom Button */}
           <div className="flex justify-center mt-16">
-            <button className="border px-6 py-2 rounded-md hover:bg-gray-200">
+            <button
+              className="border px-6 py-2 rounded-md hover:bg-gray-200"
+              onClick={() => setOpenForm(true)}
+            >
               Enquire Now
             </button>
           </div>
@@ -574,35 +605,26 @@ export default function App() {
       {/* 7th page */}
       <section
         className="relative min-h-screen bg-cover bg-center flex items-center py-20 lg:py-0"
-        style={{
-          backgroundImage: "url('/3nd-bg.svg')",
-        }}
+        style={{ backgroundImage: "url('/3nd-bg.svg')" }}
       >
-        {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/40"></div>
-
         <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-10 flex flex-col lg:flex-row justify-between items-center gap-12">
-          {/* LEFT TEXT */}
           <div className="text-white max-w-xl lg:-mt-75 text-center lg:text-left">
             <p className="text-xs tracking-widest mb-2 inline-block border border-white/20 px-2 py-1 rounded">
               REQUEST A QUOTE
             </p>
-
             <h1 className="text-4xl md:text-5xl font-bold leading-[1.1] mb-6">
-              Ready to Start Your
-              <br />
-              Automation Project?
+              Ready to Start Your <br /> Automation Project?
             </h1>
-
             <p className="text-gray-200 text-sm leading-relaxed lg:mr-3">
               For more information about our automation solutions or to request
               a quote, connect with the Sharptrax Technologies team today.
             </p>
           </div>
 
-          {/* FORM */}
           <form
-            onSubmit={handleQuoteSubmit}
+            ref={form} // Ref added here
+            onSubmit={handleQuoteSubmit} // Integrated handler used here
             className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 md:p-8 w-full lg:w-105 text-white"
           >
             <h2 className="text-2xl font-semibold mb-6">Request a Quote</h2>
@@ -696,9 +718,10 @@ export default function App() {
             {/* BUTTON */}
             <button
               type="submit"
-              className="w-full bg-white text-black py-3 rounded-lg font-medium hover:bg-gray-200 transition active:scale-[0.98]"
+              disabled={isSending}
+              className="w-full bg-white text-black py-3 rounded-lg font-medium hover:bg-gray-200 transition active:scale-[0.98] disabled:opacity-50"
             >
-              Send
+              {isSending ? "Sending..." : "Send"}
             </button>
 
             <p className="text-[10px] text-gray-300 mt-4 text-center lg:text-left leading-relaxed">
