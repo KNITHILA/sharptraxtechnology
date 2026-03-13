@@ -1,7 +1,37 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import emailjs from "@emailjs/browser";
 
 export default function Footer() {
   const [openForm, setOpenForm] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleFooterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSending(true);
+
+    if (!formRef.current) return;
+
+    emailjs
+      .sendForm(
+        "service_67r7kfg",
+        "template_xwnafxs",
+        formRef.current,
+        "9bJ_hqjsB63RMeUH0",
+      )
+      .then(() => {
+        alert("Enquiry sent successfully!");
+        setOpenForm(false);
+      })
+      .catch((error) => {
+        console.error("EmailJS Error:", error);
+        alert("Failed to send enquiry.");
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
+  };
+
   return (
     <footer
       className="relative pt-16 pb-10 overflow-hidden"
@@ -24,7 +54,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-300 mb-10"></div>
 
-        {/* GRID - 1 col on mobile, 2 on tablet, 4 on desktop */}
+        {/* GRID - Stays exactly as you provided */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 text-sm text-gray-700">
           {/* SERVICES */}
           <div>
@@ -35,22 +65,34 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-gray-600">
               <li>
-                <a href="/services/robotic-welding">Robotic Welding</a>
+                <a href="/services?cat=welding-automation&prod=Robotic Automation">
+                  Robotic Welding
+                </a>
               </li>
               <li>
-                <a href="/services/pta-welding">PTA Welding Systems</a>
+                <a href="/services?cat=welding-automation&prod=Plasma Transferred Arc Welding System">
+                  PTA Welding Systems
+                </a>
               </li>
               <li>
-                <a href="/services/rotators">Welding Rotators</a>
+                <a href="/services?cat=welding-automation&prod=Welding Rotator">
+                  Welding Rotators
+                </a>
               </li>
               <li>
-                <a href="/services/positioners">Welding Positioners</a>
+                <a href="/services?cat=welding-positioners&prod=Welding Positioners">
+                  Welding Positioners
+                </a>
               </li>
               <li>
-                <a href="/services/cnc">CNC Cutting Machines</a>
+                <a href="/services?cat=cnc-cutting&prod=Plasma CNC Machine">
+                  CNC Cutting Machines
+                </a>
               </li>
               <li>
-                <a href="/services/spm">Special Purpose Machines</a>
+                <a href="/services?cat=welding-automation&prod=Port Welding Machine SPM">
+                  Special Purpose Machines
+                </a>
               </li>
             </ul>
           </div>
@@ -64,22 +106,26 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-gray-600">
               <li>
-                <a href="/industries/heavy-engineering">Heavy Engineering</a>
+                <a href="/industries?type=heavy-engineering">
+                  Heavy Engineering
+                </a>
               </li>
               <li>
-                <a href="/industries/manufacturing">Manufacturing</a>
+                <a href="/industries?type=manufacturing">Manufacturing</a>
               </li>
               <li>
-                <a href="/industries/power-energy">Power & Energy</a>
+                <a href="/industries?type=power-energy">Power & Energy</a>
               </li>
               <li>
-                <a href="/industries/automotive">Automotive</a>
+                <a href="/industries?type=automotive">Automotive</a>
               </li>
               <li>
-                <a href="/industries/infrastructure">Infrastructure</a>
+                <a href="/industries?type=infrastructure">Infrastructure</a>
               </li>
               <li>
-                <a href="/industries/machinery">Special Machinery</a>
+                <a href="/industries?type=special-machinery">
+                  Special Machinery
+                </a>
               </li>
             </ul>
           </div>
@@ -128,14 +174,15 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* BOTTOM - Stacks on mobile */}
+        {/* BOTTOM */}
         <div className="flex flex-col md:flex-row justify-between items-center mt-16 pt-6 border-t border-gray-200 md:border-none text-xs text-gray-600 gap-4 text-center md:text-left">
           <p>© Copyright Sharptrax Technologies. All Rights Reserved</p>
         </div>
+
+        {/* MODAL FORM - Functional Integration */}
         {openForm && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
             <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-8 relative">
-              {/* Close Button */}
               <button
                 onClick={() => setOpenForm(false)}
                 className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl"
@@ -148,68 +195,59 @@ export default function Footer() {
               </h2>
 
               <form
+                ref={formRef}
                 className="space-y-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setOpenForm(false);
-                }}
+                onSubmit={handleFooterSubmit}
               >
-                {/* Name */}
                 <div>
                   <label className="text-sm text-gray-600">Full Name *</label>
                   <input
+                    name="user_name"
                     type="text"
                     required
                     minLength={3}
-                    pattern=".*\S.*"
-                    title="Please enter at least 3 characters"
                     className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-black"
                   />
                 </div>
 
-                {/* Email */}
                 <div>
                   <label className="text-sm text-gray-600">
                     Email Address *
                   </label>
                   <input
+                    name="user_email"
                     type="email"
                     required
-                    pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-                    title="Please enter a valid email"
                     className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-black"
                   />
                 </div>
 
-                {/* Phone */}
                 <div>
                   <label className="text-sm text-gray-600">
                     Phone Number *
                   </label>
                   <input
+                    name="user_phone"
                     type="tel"
                     required
                     pattern="[0-9]{10}"
-                    title="Enter a valid 10-digit phone number"
                     className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-black"
                   />
                 </div>
 
-                {/* Requirement */}
                 <div>
                   <label className="text-sm text-gray-600">
                     Requirement Details *
                   </label>
                   <textarea
+                    name="project_details"
                     required
                     minLength={10}
-                    title="Please enter at least 10 characters"
                     rows={4}
                     className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-black"
                   ></textarea>
                 </div>
 
-                {/* Buttons */}
                 <div className="flex justify-end gap-3 pt-2">
                   <button
                     type="button"
@@ -221,9 +259,10 @@ export default function Footer() {
 
                   <button
                     type="submit"
-                    className="px-5 py-2 bg-black text-white rounded-md hover:bg-gray-800"
+                    disabled={isSending}
+                    className="px-5 py-2 bg-black text-white rounded-md hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
                   >
-                    Send Enquiry
+                    {isSending ? "Sending..." : "Send Enquiry"}
                   </button>
                 </div>
               </form>

@@ -6,11 +6,15 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Services from "./pages/Services";
 import Contact from "./pages/Contact";
+import Industries from "./pages/Industries";
+import Gallery from "./pages/gallery";
+import WhatsAppFloat from "./components/whatsapp";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Navbar />
+      <WhatsAppFloat />
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -18,6 +22,8 @@ export default function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/location" element={<Location />} />
+        <Route path="/industries" element={<Industries />} />
+        <Route path="/gallery" element={<Gallery />} />
       </Routes>
 
       <Footer />
