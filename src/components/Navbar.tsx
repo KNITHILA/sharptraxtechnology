@@ -13,7 +13,7 @@ export default function Navbar() {
           <img
             src="/logo.svg"
             alt="Sharptrax Technologies"
-            className="h-10 md:h-14 w-auto"
+            className="h-30 md:h-20 w-100"
           />
         </div>
 
@@ -30,10 +30,7 @@ export default function Navbar() {
           <a href="/services" className="hover:text-black">
             Services
           </a>
-          <p className="text-gray-300">/</p>
-          <a href="#" className="hover:text-black">
-            Projects
-          </a>
+          
           <p className="text-gray-300">/</p>
           <a href="/gallery" className="hover:text-black">
             Gallery

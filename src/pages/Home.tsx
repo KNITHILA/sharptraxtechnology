@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
+
 const solutions = [
   {
     title: "Robotic Automation",
@@ -78,6 +79,54 @@ const faqs = [
   },
 ];
 
+const testimonials = [
+  {
+    id: 1,
+    name: "GANESAN",
+    role: "Regional Markets Executive",
+    text: "Their robotic welding solutions helped us reduce manual errors and increase output. Sharptrax is our go-to partner for all automation needs!",
+    imgSrc: "/ceoimg.png", 
+    initial: "G",
+    bgColor: "bg-blue-600",
+  },
+  {
+    id: 2,
+    name: "Ram Kumar",
+    role: "Client",
+    text: "Sharptrax Technologies provided us with a seamless welding automation system that significantly improved our production efficiency. Their expertise and customer support are exceptional!",
+    imgSrc: "", // Leave blank to show the initial "R"
+    initial: "R",
+    bgColor: "bg-slate-400",
+  },
+  {
+    id: 3,
+    name: "Elstin S",
+    role: "Client",
+    text: "We integrated their solutions into our plant, and the results were outstanding! The precision and reliability of their systems are truly commendable.",
+    imgSrc: "", 
+    initial: "E",
+    bgColor: "bg-gray-600",
+  },
+  {
+    id: 4,
+    name: "Helana",
+    role: "Client",
+    text: "We have been working with Sharptrax for years, and their dedication to quality and innovation is unmatched. Highly recommend their services!",
+    imgSrc: "", // Leave blank to show the initial "H"
+    initial: "H",
+    bgColor: "bg-blue-500",
+  },
+  {
+    id: 5,
+    name: "Peter Amala Anand",
+    role: "Client",
+    text: "The team at Sharptrax Technologies understands automation like no other. Their custom-built systems were a game-changer for our manufacturing unit.",
+    imgSrc: "", 
+    initial: "P",
+    bgColor: "bg-gray-700",
+  },
+];
+
 const row1 = logos.slice(0, 9);
 const row2 = logos.slice(9, 18);
 
@@ -104,6 +153,9 @@ export default function App() {
   const form = useRef<HTMLFormElement>(null);
   const [isSending, setIsSending] = useState(false);
 
+  // Testimonial State
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
   const handleQuoteSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -120,7 +172,7 @@ export default function App() {
             "service_67r7kfg", // Your Service ID
             "template_xwnafxs", // Your Template ID
             form.current,
-            "9bJ_hqjsB63RMeUH0", // Your Public Key
+            "9bJ_hqjsB63RMeUH0" // Your Public Key
           )
           .then(() => {
             alert("Enquiry sent! We will get back to you soon.");
@@ -144,6 +196,7 @@ export default function App() {
       }
     }
   };
+
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -152,8 +205,9 @@ export default function App() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   const handleQuoteInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setQuoteFormData({
       ...quoteFormData,
@@ -198,6 +252,21 @@ export default function App() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  // Testimonial Handlers
+  const handleNextTestimonial = () => {
+    setCurrentTestimonial((prev) =>
+      prev === testimonials.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  const handlePrevTestimonial = () => {
+    setCurrentTestimonial((prev) =>
+      prev === 0 ? testimonials.length - 1 : prev - 1
+    );
+  };
+
+  const activeTestimonial = testimonials[currentTestimonial];
+
   return (
     <div className="w-full min-h-screen hero-font">
       {/* NAVBAR */}
@@ -218,7 +287,7 @@ export default function App() {
         </video>
 
         {/* DARK OVERLAY */}
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 /40"></div>
 
         {/* HERO TEXT */}
         <div className="relative z-10 mt-12 h-full flex items-center">
@@ -247,9 +316,13 @@ export default function App() {
                 Enquire Now
               </button>
 
-              <button className="bg-black text-white shadow-2xl px-6 py-3 rounded-lg border border-white/10">
+              {/* EXPLORE SOLUTIONS BUTTON */}
+              <a 
+                href="/services" 
+                className="bg-black text-white shadow-2xl px-6 py-3 rounded-lg border border-white/10 flex items-center justify-center hover:bg-gray-900 transition-colors"
+              >
                 Explore Solutions
-              </button>
+              </a>
             </div>
           </motion.div>
         </div>
@@ -349,6 +422,7 @@ export default function App() {
           </div>
         </div>
       )}
+
       {/* Engineering section */}
       <section className="relative w-full py-20 md:py-32 bg-gray-100 overflow-hidden">
         {/* BACKGROUND GRID */}
@@ -513,17 +587,9 @@ export default function App() {
           </div>
         </div>
       </section>
-      <section
-        className="relative h-screen w-full flex flex-col justify-center px-16"
-        style={{
-          backgroundImage: "url('/4th-bg.svg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></section>
+      
       {/* 5th page----Automation Solutions */}
-
-      <section className="bg-gray-100 py-20 px-6">
+      <section className="bg-gray-50 py-20 px-6">
         <div className="max-w-7xl mx-auto">
           {/* Title */}
           <h2 className="text-center text-5xl font-semibold mb-20 hero-font">
@@ -531,36 +597,45 @@ export default function App() {
             <span className="text-gray-800">Solutions</span>
           </h2>
 
-          {/* Grid */}
-          <div className="grid md:grid-cols-2 gap-x-24 gap-y-16">
+          {/* Grid - UPDATED TO CLICKABLE LINKS */}
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
             {solutions.map((item, index) => (
-              <div
+              <a
+                href={`/services?machine=${encodeURIComponent(item.title)}`}
                 key={index}
-                className="flex items-center justify-between gap-8"
+                className="group flex items-center justify-between gap-8 bg-white p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-red-100 cursor-pointer"
               >
                 {/* Text */}
                 <div className="max-w-sm">
-                  <h3 className="font-semibold text-lg text-gray-900 mb-2">
+                  <h3 className="font-bold text-xl text-gray-900 mb-3 group-hover:text-red-600 transition-colors">
                     {item.title}
                   </h3>
-
-                  <p className="text-gray-600 text-sm mb-4">{item.desc}</p>
+                  <p className="text-gray-500 text-sm mb-5 leading-relaxed line-clamp-4">
+                    {item.desc}
+                  </p>
+                  
+                  {/* Read More button indicator */}
+                  <span className="inline-flex items-center gap-2 text-sm font-bold text-red-600 opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                    View Specifications <span>→</span>
+                  </span>
                 </div>
 
                 {/* Image */}
-                <img
-                  src={item.img}
-                  alt={item.title}
-                  className="w-44 object-contain"
-                />
-              </div>
+                <div className="w-32 md:w-48 shrink-0 flex items-center justify-center">
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-full object-contain transform group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+              </a>
             ))}
           </div>
 
           {/* Bottom Button */}
           <div className="flex justify-center mt-16">
             <button
-              className="border px-6 py-2 rounded-md hover:bg-gray-200"
+              className="border border-gray-300 bg-white shadow-sm px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
               onClick={() => setOpenForm(true)}
             >
               Enquire Now
@@ -568,6 +643,7 @@ export default function App() {
           </div>
         </div>
       </section>
+
       {/* 6TH PAGE */}
       <section className="py-12 md:py-20 bg-gray-100 overflow-hidden">
         <h2 className="text-center text-2xl md:text-4xl mb-10 md:mb-16 tracking-widest px-4">
@@ -602,6 +678,7 @@ export default function App() {
           </div>
         </div>
       </section>
+
       {/* 7th page */}
       <section
         className="relative min-h-screen bg-cover bg-center flex items-center py-20 lg:py-0"
@@ -622,8 +699,8 @@ export default function App() {
           </div>
 
           <form
-            ref={form} // Ref added here
-            onSubmit={handleQuoteSubmit} // Integrated handler used here
+            ref={form}
+            onSubmit={handleQuoteSubmit}
             className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-6 md:p-8 w-full lg:w-105 text-white"
           >
             <h2 className="text-2xl font-semibold mb-6">Request a Quote</h2>
@@ -730,6 +807,7 @@ export default function App() {
           </form>
         </div>
       </section>
+
       {/* 8th PAGE */}
       <section className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6">
@@ -784,38 +862,107 @@ export default function App() {
           </div>
         </div>
       </section>
-      {/* TESTIMONIAL SECTION */}
-      <section className="relative py-32 bg-white gradient-to-tr from-gray-100 to-white overflow-hidden">
-        <div className="max-w-6xl mx-auto  flex items-center gap-28">
-          {/* LEFT IMAGE BLOCK */}
-          <div className="relative w-250 h-250 shrink-0 -ml-45 -mt-50">
-            {/* IMAGE (contains blue graphic + photo) */}
-            <img
-              src="/ceoimg.svg"
-              alt="CEO testimonial"
-              className="w-full object-contain"
-            />
+
+      {/* 9th PAGE: TESTIMONIAL SECTION SLIDER */}
+      <section className="relative py-20 bg-gradient-to-tr from-gray-100 to-white overflow-hidden">
+        <div className="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-12 md:gap-20">
+          
+          {/* LEFT IMAGE BLOCK (Circle Photo) */}
+          <div className="relative w-full max-w-sm shrink-0 flex justify-center items-center">
+            {/* Animated Circle Container */}
+            <motion.div 
+              key={activeTestimonial.id}
+              initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="relative w-64 h-64 md:w-80 md:h-80 bg-white rounded-full shadow-2xl flex items-center justify-center border-8 border-white overflow-hidden drop-shadow-xl"
+            >
+              {activeTestimonial.imgSrc ? (
+                <img
+                  src={activeTestimonial.imgSrc}
+                  alt={activeTestimonial.name}
+                  className="absolute inset-0 w-80 h-75 object-cover object-center scale-[1.0]"
+                />
+              ) : (
+                <div className={`w-full h-full flex items-center justify-center ${activeTestimonial.bgColor} text-white text-8xl font-bold`}>
+                  {activeTestimonial.initial}
+                </div>
+              )}
+            </motion.div>
           </div>
 
-          {/* RIGHT CONTENT */}
-          <div className="relative max-w-xl -mt-6 -ml-[42%]">
-            {/* NAME */}
-            <h2 className="text-5xl font-bold tracking-wide">GANESH</h2>
+          {/* RIGHT CONTENT (Text & Review) */}
+          <div className="relative max-w-lg w-full">
+            {/* SECTION HEADING */}
+            <h4 className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-3">
+              Testimonials
+            </h4>
 
-            {/* ROLE */}
-            <p className="text-gray-500 text-lg mb-6">
-              Regional Markets Executive
-            </p>
+            {/* Animated Text Wrapper */}
+            <motion.div
+              key={`text-${activeTestimonial.id}`}
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              {/* NAME */}
+              <h2 className="text-4xl font-bold tracking-wide text-gray-900 uppercase">
+                {activeTestimonial.name}
+              </h2>
 
-            {/* TESTIMONIAL BOX */}
-            <div className="bg-white shadow-xl px-6 py-4 rounded-lg text-gray-700 text-sm leading-relaxed">
-              " Their robotic welding solutions helped us reduce manual errors
-              and increase output. Sharptrax is our go-to partner for all
-              automation needs! "
+              {/* 5-STAR RATING */}
+              <div className="flex gap-1 mt-2 mb-2 text-yellow-500 text-2xl drop-shadow-sm">
+                ★★★★★
+              </div>
+
+              {/* ROLE */}
+              <p className="text-gray-500 text-lg mb-8">
+                {activeTestimonial.role}
+              </p>
+
+              {/* TESTIMONIAL BOX */}
+              <div className="bg-white shadow-lg px-8 py-6 rounded-2xl border border-gray-50 text-gray-700 text-base leading-relaxed min-h-[140px] flex items-center">
+                <div className="relative w-full">
+                  <span className="text-4xl text-blue-400 font-serif leading-none absolute -top-4 -left-4">"</span>
+                  <p className="relative z-10">{activeTestimonial.text}</p>
+                  <span className="text-4xl text-blue-400 font-serif leading-none absolute -bottom-6 right-0 translate-y-2">"</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* SLIDER CONTROLS (Dots & Arrows) */}
+            <div className="flex items-center gap-6 mt-8">
+              <button 
+                onClick={handlePrevTestimonial} 
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-md border border-gray-100 hover:bg-blue-50 transition text-gray-600 font-bold"
+              >
+                &#8592;
+              </button>
+              
+              {/* Pagination Dots */}
+              <div className="flex gap-2">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentTestimonial(index)}
+                    className={`w-3 h-3 rounded-full transition-all ${
+                      index === currentTestimonial ? "bg-blue-600 w-6" : "bg-gray-300"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <button 
+                onClick={handleNextTestimonial} 
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-md border border-gray-100 hover:bg-blue-50 transition text-gray-600 font-bold"
+              >
+                &#8594;
+              </button>
             </div>
           </div>
         </div>
       </section>
+
     </div>
   );
 }

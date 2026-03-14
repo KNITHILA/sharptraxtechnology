@@ -2,14 +2,29 @@ import { useState, useEffect, useRef } from "react";
 import emailjs from "@emailjs/browser";
 import { motion, AnimatePresence } from "framer-motion";
 
-const categories = [
+// --- Types for better structure ---
+interface Product {
+  name: string;
+  desc: string;
+  features?: string[];
+  imgs: string[];
+  video?: string;
+}
+
+interface Category {
+  id: string;
+  title: string;
+  products: Product[];
+}
+
+const categories: Category[] = [
   {
     id: "welding-automation",
     title: "Welding Automation",
     products: [
       {
         name: "Robotic Automation",
-        desc: "Robotic automation is at the core of Sharptrax Technologies’ advanced welding solutions. With cutting-edge robotic welding systems, we help industries achieve higher precision, efficiency, and productivity in their manufacturing processes.                                Sharptrax Technologies offers over 20 years of experience as a leader and innovator integrating automation and robotics for the welding industry.",
+        desc: "Robotic automation is at the core of Sharptrax Technologies’ advanced welding solutions. With cutting-edge robotic welding systems, we help industries achieve higher precision, efficiency, and productivity in their manufacturing processes. Sharptrax Technologies offers over 20 years of experience as a leader and innovator integrating automation and robotics for the welding industry.",
         features: [
           "Our robotic systems can be seamlessly integrated into existing production lines, ensuring minimal disruption and maximum efficiency.",
           "Robots deliver consistent weld quality, reducing errors and minimizing material wastage.",
@@ -24,7 +39,7 @@ const categories = [
       },
       {
         name: "Plasma Transferred Arc Welding System",
-        desc: " Plasma Transferred Arc (PTA) Welding is a highly advanced and precise welding process designed for hard-facing, cladding, and high-quality metal deposition. At Sharptrax Technologies, we specialize in PTA welding solutions that enhance the durability and performance of industrial components, reducing wear and tear in extreme working conditions.   ",
+        desc: " Plasma Transferred Arc (PTA) Welding is a highly advanced and precise welding process designed for hard-facing, cladding, and high-quality metal deposition. At Sharptrax Technologies, we specialize in PTA welding solutions that enhance the durability and performance of industrial components, reducing wear and tear in extreme working conditions. ",
         features: [
           "The system enables high-precision metering of metallic powder, significantly reducing material waste and lowering overall costs compared to traditional welding methods.",
           "Designed for seamless integration into automated workflows, PTAW ensures consistent, high-quality hardfacing results with exceptional repeatability.",
@@ -146,8 +161,7 @@ const categories = [
         name: "Hydraulic End Cap Welding SPM",
         desc: "The Hydraulic End Cap Welding SPM is a specialized machine designed for precise and efficient welding of end caps with hydraulic control. It ensures stable positioning, uniform weld quality, and enhanced productivity for industrial applications.",
         features: [
-          "Versatile Application Range – Engineered to be suitable for a wide range of industrial welding jobs and workpiece types.",
-          "Specialized Hydraulic Solutions – Specifically designed for high-precision welding of hydraulic cylinder components.",
+          "Advanced PLC Control – Utilizes a PLC-controlled weld sequence for precise automation and consistent weld bead quality.",
           "Integrated Steady Rest – Equipped with a steady rest to ensure stable support and ease of operation during loading and unloading.",
           "Flexible Diameter Capacity – Available in various sizes to accommodate workpiece diameters ranging from 50 mm to 300 mm.",
           "Heavy-Duty Construction – Features a solid, robust build optimized for superior weight balancing and vibration-free operation.",
@@ -163,10 +177,10 @@ const categories = [
       },
       {
         name: "Robotic Gantry Automation",
-        desc: "Robotic Gantry Automation is a cornerstone of Sharptrax Technologies’ heavy-duty manufacturing solutions. By utilizing overhead gantry systems integrated with high-performance robotics, we provide expansive work envelopes and superior flexibility for large-scale welding and assembly tasks. With over 20 years of expertise, Sharptrax delivers gantry systems that optimize floor space while maintaining the highest levels of precision and structural integrity.",
+        desc: "Robotic Gantry Automation is a cornerstone of Sharptrax Technologies’ heavy-duty manufacturing solutions. By utilizing overhead gantry systems integrated with high-performance robotics, we provide expansive work envelopes and superior flexibility for large-scale welding and assembly tasks.",
         features: [
-          "Overhead configurations maximize floor space and allow for the handling of large, heavy workpieces that traditional floor-mounted robots cannot reach.",
-          "Multi-axis gantry movement combined with robotic precision ensures consistent, high-quality welds across long spans and complex geometries.",
+          "Overhead configurations maximize floor space and allow for handling large, heavy workpieces.",
+          "Multi-axis gantry movement combined with robotic precision ensures consistent, high-quality welds.",
         ],
         imgs: [
           "/servicemachines/welding automation/12/mac12.1.jpg",
@@ -177,10 +191,10 @@ const categories = [
       },
       {
         name: "Robotic Trolley Welding",
-        desc: "Sharptrax Technologies’ Robotic Trolley Welding systems provide an agile solution for manufacturing environments requiring mobility and flexibility. By mounting robotic arms on synchronized automated trolleys, we enable the system to traverse linear tracks, effectively extending the robot's reach across multiple workstations. Backed by 20 years of innovation, our trolley-mounted robots are designed for high-speed, high-accuracy welding of long structures and repetitive assemblies.",
+        desc: "Sharptrax Technologies’ Robotic Trolley Welding systems provide an agile solution for manufacturing environments requiring mobility and flexibility. By mounting robotic arms on synchronized automated trolleys, we enable the system to traverse linear tracks.",
         features: [
-          "Linear track integration allows for a single robotic unit to service multiple welding fixtures, significantly increasing asset utilization.",
-          "High-precision servo-driven trolleys ensure seamless synchronization between movement and welding for consistent bead quality.",
+          "Linear track integration allows for a single robotic unit to service multiple welding fixtures.",
+          "High-precision servo-driven trolleys ensure seamless synchronization.",
         ],
         imgs: [
           "/servicemachines/welding automation/13/mac13.1.jpg",
@@ -189,10 +203,10 @@ const categories = [
       },
       {
         name: "Material Tilter",
-        desc: "Sharptrax Technologies’ Material Tilters are engineered for high-stability tilting of heavy job components across diverse industrial applications. Built with a solid construction for optimal weight balancing, these systems ensure controlled and safe rotation of workpieces. Whether for assembly, inspection, or positioning, our tilters provide a robust solution for handling loads from 1T up to 50 tonnes, ensuring maximum operational safety and efficiency.",
+        desc: "Sharptrax Technologies’ Material Tilters are engineered for high-stability tilting of heavy job components across diverse industrial applications. Built with a solid construction for optimal weight balancing.",
         features: [
-          "Available in both motorized and hydraulic-based configurations to suit specific torque and load requirements.",
-          "Advanced PLC and servo-controlled options are available for applications requiring high precision and automated positioning.",
+          "Available in both motorized and hydraulic-based configurations.",
+          "Advanced PLC and servo-controlled options available for high precision.",
         ],
         imgs: [
           "/servicemachines/welding automation/14/mac14.1.jpg",
@@ -209,12 +223,10 @@ const categories = [
     products: [
       {
         name: "Welding Positioners",
-        desc: "At Sharptrax Technologies, our welding positioners are designed to enhance efficiency, precision, and safety in welding operations. These advanced positioning systems allow welders to rotate and tilt workpieces into the optimal position, ensuring better accessibility, reduced strain, and improved weld quality..",
+        desc: "At Sharptrax Technologies, our welding positioners are designed to enhance efficiency, precision, and safety in welding operations. These advanced positioning systems allow welders to rotate and tilt workpieces into the optimal position.",
         features: [
-          "Wide Load Capacity Range – Available in various weight load capacities ranging from 50 kg to 20 tons.",
-          "Adjustable Center of Gravity – Engineered to accommodate a center of gravity from 75 mm to 300 mm.",
-          "Versatile Loading Options – Designed to handle both eccentric and non-eccentric job loads with precision.",
-          "Customizable Tilt Table – Features a tilt table design that can be fully customized to meet specific project requirements.",
+          "Wide Load Capacity Range – Available from 50 kg to 20 tons.",
+          "Adjustable Center of Gravity – Engineered for 75 mm to 300 mm ranges.",
         ],
         imgs: [
           "/servicemachines/welding positioners/1/pos1.1.jpg",
@@ -226,15 +238,10 @@ const categories = [
       },
       {
         name: "L-Type Positioner",
-        desc: "Sharptrax offers extensive range of L type Positioners for manipulating various types of components, Servo/VFD driven for positioning the arms. We also integrate/synchronize with third party Robot to accomplish complete welding process.",
+        desc: "Sharptrax offers extensive range of L type Positioners for manipulating various types of components, Servo/VFD driven for positioning the arms.",
         features: [
-          "High Positioning Accuracy – Engineered for precision-driven operations with exceptional position accuracy.",
-          "Dual-Axis Servo Control – Features two-axis control powered by high-performance servo drives and motors.",
-          "Advanced PLC Integration – Includes a PLC control option for automated and reliable sequence management.",
-          "Robotic Compatibility – Designed for seamless integration with industrial robots to enhance automation.",
-          "Maximum Efficiency – Optimized to maximize both operational efficiency and welding accuracy.",
-          "Superior Material Handling – Provides excellent material handling capabilities for various workpiece sizes.",
-          "Full Rotational Range – Equipped with 360-degree rotation ability for unrestricted access and positioning.",
+          "Full Rotational Range – Equipped with 360-degree rotation.",
+          "Dual-Axis Servo Control – Powered by high-performance servo drives.",
         ],
         imgs: [
           "/servicemachines/welding positioners/2/pos2.1.jpg",
@@ -245,7 +252,7 @@ const categories = [
       },
       {
         name: "Scissor Rollers",
-        desc: "Sharptrax offers very high quality Scissor Rollers, which can be used to hold your pipe as a support for your existing machines and can be used as standalone device for pipe support.",
+        desc: "Sharptrax offers very high quality Scissor Rollers, which can be used to hold your pipe as a support for your existing machines.",
         imgs: [
           "/servicemachines/welding positioners/3/pos3.1.jpg",
           "/servicemachines/welding positioners/3/pos3.2.jpg",
@@ -255,7 +262,7 @@ const categories = [
       },
       {
         name: "Welding Turn Table",
-        desc: "We offer excellent quality range of Welding Positioners (Manipulators) that are made from quality raw material. Widely used in various industrial applications, our Positioners position you for maximum flexibility and efficiency. This can also be integrated with Robotic welding automation.",
+        desc: "We offer excellent quality range of Welding Positioners (Manipulators) that are made from quality raw material. Widely used in various industrial applications.",
         imgs: [
           "/servicemachines/welding positioners/4/pos4.1.jpg",
           "/servicemachines/welding positioners/4/pos4.2.jpg",
@@ -271,12 +278,10 @@ const categories = [
     products: [
       {
         name: "Plasma CNC Machine",
-        desc: "At Sharptrax Technologies, we specialize in trading high-quality Plasma CNC Cutting Machines designed for precision cutting, high-speed performance, and superior efficiency. Our Plasma CNC machines are ideal for industries requiring accurate metal cutting solutions with advanced automation.",
+        desc: "At Sharptrax Technologies, we specialize in trading high-quality Plasma CNC Cutting Machines designed for precision cutting, high-speed performance, and superior efficiency.",
         features: [
-          "High-Precision Cutting – Delivers smooth, clean, and accurate cuts across various metal thicknesses with minimal material wastage.",
-          "CNC-Controlled Automation – Ensures highly efficient and repeatable cutting processes through advanced, user-friendly programming interfaces.",
-          "Heavy-Duty Build – Constructed with a robust frame to handle high-speed industrial operations while maintaining long-term stability.",
-          "Clean Edge Finish – Optimized plasma technology reduces dross and secondary finishing requirements, saving operational time.",
+          "High-Precision Cutting – Accurate cuts across various metal thicknesses.",
+          "CNC-Controlled Automation – User-friendly programming interfaces.",
         ],
         imgs: [
           "/servicemachines/plasma cnc/mac1.1.jpg",
@@ -293,12 +298,10 @@ const categories = [
     products: [
       {
         name: "Torch Weaving Unit",
-        desc: "At Sharptrax Technologies, our Torch Weaving Unit, also known as the Welding Weaving Unit, is designed to enhance welding precision and efficiency by introducing a controlled weaving motion to the welding torch. This advanced system ensures uniform bead formation, improved penetration, and better fusion, making it ideal for critical and high-strength welding applications.",
+        desc: "At Sharptrax Technologies, our Torch Weaving Unit is designed to enhance welding precision by introducing a controlled weaving motion to the welding torch.",
         features: [
-          "High Precision Torch Weaving – Specifically engineered for PTAW, TIG, MIG, and SAW applications with superior accuracy.",
-          "Advanced Linear Motion – Achieved through standard LM bush/linear bearings combined with ball screw transmission for maximum durability.",
-          "Precise Width Control – Offers a 0 – 40 mm weaving width precisely managed via micro-controller or PLC integration.",
-          "Industrial Grade Reliability – Built for high-performance welding environments requiring consistent and repeatable motion.",
+          "Precise Width Control – Offers a 0 – 40 mm weaving width.",
+          "Advanced Linear Motion – Ball screw transmission for maximum durability.",
         ],
         imgs: [
           "/servicemachines/machine accessories/1/acc1.1.jpg",
@@ -309,7 +312,7 @@ const categories = [
       },
       {
         name: "AVC Unit",
-        desc: "At Sharptrax Technologies, we manufacture Automatic Voltage Controller (AVC) unit for TIG and Plasma welding process. AVC units are built with LM guideway slides and Servo Motors for precise control height adjustments. AVC units are being used for moving the welding torch vertically, in order to maintain gap between the torch and the job irrespective of its ovality.",
+        desc: "Automatic Voltage Controller (AVC) unit for TIG and Plasma welding process. Built with LM guideway slides and Servo Motors.",
         imgs: [
           "/servicemachines/machine accessories/2/acc2.1.jpg",
           "/servicemachines/machine accessories/2/acc2.2.jpg",
@@ -317,13 +320,10 @@ const categories = [
       },
       {
         name: "Laser Seam Tracking Unit",
-        desc: "At Sharptrax Technologies, our Laser Seam Tracking Unit enables tracking of almost all weld joints to avoid manual intervention. It is independently developed, convenient to operate and easy to teach. It features premium optical components compatible with all major robot brands. The unit includes seam finding and tracking functions, a host control unit with an accurate algorithm, and an internal airway design.",
+        desc: "Our Laser Seam Tracking Unit enables tracking of almost all weld joints to avoid manual intervention. Compatible with all major robot brands.",
         features: [
-          "Automatic Real-Time Detection – Enhances welding precision by automatically detecting and adjusting to seam variations during operation.",
-          "Consistent Weld Quality – Engineered to maintain high-quality, repeatable weld beads by compensating for real-time changes.",
-          "Error Reduction – Significantly reduces defects and manual rework through advanced automated tracking sensors.",
-          "High Process Efficiency – Improves the overall speed and reliability of automated welding workflows.",
-          "Precision Laser Guidance – Utilizes high-precision laser technology to ensure the torch follows the exact seam path.",
+          "Automatic Real-Time Detection – Adjusts to seam variations during operation.",
+          "Precision Laser Guidance – Ensures the torch follows exact seam path.",
         ],
         imgs: [
           "/servicemachines/machine accessories/3/acc3.1.jpg",
@@ -334,7 +334,7 @@ const categories = [
       },
       {
         name: "Welding Torch",
-        desc: "At Sharptrax Technologies, we manufacture high quality PTA (Plasma Transferred Arc) welding Torches for all your hardfacing/cladding applications, we also build customised water cooled PTA OD and ID Torches for high deposition stellite, colmonoy and various alloy powder overlaying.",
+        desc: "We manufacture high quality PTA (Plasma Transferred Arc) welding Torches for all your hardfacing/cladding applications.",
         imgs: [
           "/servicemachines/machine accessories/4/acc4.1.jpg",
           "/servicemachines/machine accessories/4/acc4.2.jpg",
@@ -343,22 +343,21 @@ const categories = [
       },
       {
         name: "Cross Slides",
-        desc: "At Sharptrax Technologies, we manufacture cross slide Units for Torch manipulation, LM rails and lead screw combination makes the transmission so smooth, Different payloads and various stroke length slides are being made for several applications.",
+        desc: "We manufacture cross slide Units for Torch manipulation using LM rails and lead screw combinations.",
         imgs: ["/servicemachines/machine accessories/5/acc5.1.jpg"],
       },
     ],
   },
 ];
+
 export default function Services() {
   const formRef = useRef<HTMLFormElement>(null);
+  const detailSectionRef = useRef<HTMLDivElement>(null);
   const [isSending, setIsSending] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const initialCat = categories[0] || { id: "", products: [] };
-  const [activeCat, setActiveCat] = useState(initialCat.id);
-  const [activeProd, setActiveProd] = useState(
-    initialCat.products[0] || { name: "", desc: "", imgs: [""] },
-  );
+  const [activeCatId, setActiveCatId] = useState<string>(categories[0].id);
+  const [activeProd, setActiveProd] = useState<Product>(categories[0].products[0]);
   const [activeImgIndex, setActiveImgIndex] = useState(0);
 
   const [formData, setFormData] = useState({
@@ -377,29 +376,40 @@ export default function Services() {
     if (catId) {
       const selectedCat = categories.find((c) => c.id === catId);
       if (selectedCat) {
-        setActiveCat(selectedCat.id);
+        setActiveCatId(selectedCat.id);
         if (prodName) {
           const selectedProd = selectedCat.products.find(
-            (p) => p.name.toLowerCase() === prodName.toLowerCase(),
+            (p) => p.name.toLowerCase() === prodName.toLowerCase()
           );
           if (selectedProd) setActiveProd(selectedProd);
+        } else {
+          setActiveProd(selectedCat.products[0]);
         }
       }
     }
   }, []);
 
-  const handleCatClick = (cat: any) => {
-    setActiveCat(cat.id);
+  const activeCategory = categories.find(c => c.id === activeCatId) || categories[0];
+
+  const handleCatClick = (cat: Category) => {
+    setActiveCatId(cat.id);
+    // Automatically select the first product in the new category to keep details relevant
     setActiveProd(cat.products[0]);
     setActiveImgIndex(0);
   };
 
-  const handleProdClick = (prod: any) => {
+  const handleProdClick = (prod: Product) => {
     setActiveProd(prod);
     setActiveImgIndex(0);
+    // Smooth scroll to the details section
+    detailSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  // Validation Logic
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   const validateForm = () => {
     let newErrors: { [key: string]: string } = {};
     if (!formData.name.trim() || formData.name.trim().length < 3) {
@@ -431,7 +441,7 @@ export default function Services() {
       user_email: formData.email.trim(),
       user_phone: formData.phone.trim(),
       project_details: formData.details.trim(),
-      product_interest: activeProd.name, // Sends the currently viewed product info
+      product_interest: activeProd.name,
     };
 
     emailjs
@@ -439,7 +449,7 @@ export default function Services() {
         "service_67r7kfg",
         "template_xwnafxs",
         templateParams,
-        "9bJ_hqjsB63RMeUH0",
+        "9bJ_hqjsB63RMeUH0"
       )
       .then(() => {
         alert("Enquiry Sent Successfully!");
@@ -456,188 +466,196 @@ export default function Services() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white hero-font pb-20">
-      <div className="h-16 md:h-20 w-full bg-white"></div>
+    <div className="w-full min-h-screen bg-gray-50 font-sans pb-20 selection:bg-red-100">
+      <div className="h-16 md:h-20 w-full bg-white border-b border-gray-100 shadow-sm"></div>
 
-      <section className="py-8 md:py-20 px-4 md:px-6 max-w-7xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold mb-8 md:mb-12 uppercase tracking-tight text-gray-900">
-          Product and Services
-        </h2>
-
-        {/* 1. SLIDING & EXPANDING SECTION */}
-        <div className="flex flex-col md:flex-row gap-4 h-auto md:h-112.5 mb-12 md:mb-20 overflow-hidden">
-          {categories.map((cat) => {
-            const isActive = activeCat === cat.id;
-            return (
-              <motion.div
-                key={cat.id}
-                animate={{
-                  flex: isActive ? 15 : 1,
-                  backgroundColor: isActive ? "#ffffff" : "#f3f4f6",
-                }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="relative rounded-4xl md:rounded-[40px] border border-gray-200 flex flex-col md:flex-row shadow-sm overflow-hidden"
-              >
-                <div
-                  onClick={() => handleCatClick(cat)}
-                  className={`relative z-20 flex flex-row md:flex-col items-center justify-between md:justify-center p-5 md:p-6 cursor-pointer transition-all duration-500 bg-inherit ${
-                    isActive ? "w-full md:w-62.5 md:border-r" : "w-full h-full"
-                  }`}
-                >
-                  <motion.h3
-                    layout
-                    className={`font-bold uppercase tracking-widest text-center ${
-                      isActive
-                        ? "text-base md:text-lg text-red-500"
-                        : "text-sm md:text-lg text-gray-400 md:-rotate-90 whitespace-nowrap"
-                    }`}
-                  >
-                    {cat.title}
-                  </motion.h3>
-                  {isActive && (
-                    <motion.button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveCat("");
-                      }}
-                      className="md:absolute md:bottom-8 w-10 h-10 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-sm"
-                    >
-                      ←
-                    </motion.button>
-                  )}
-                </div>
-
-                <AnimatePresence>
-                  {isActive && (
-                    <motion.div
-                      initial={{ x: "-100%", opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      exit={{ x: "-100%", opacity: 0 }}
-                      transition={{ duration: 0.5 }}
-                      className="flex-1 bg-white overflow-x-auto flex flex-row items-center gap-4 px-6 py-2 scrollbar-hide"
-                    >
-                      {cat.products.map((prod, idx) => (
-                        <motion.div
-                          key={idx}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleProdClick(prod);
-                          }}
-                          className={`min-w-70 h-[calc(100%-4px)] p-6 rounded-[35px] border-2 cursor-pointer flex flex-col items-center justify-center text-center transition-all ${
-                            activeProd.name === prod.name
-                              ? "bg-red-500 border-red-500 text-white shadow-xl scale-[1.02]"
-                              : "bg-gray-50 border-transparent text-gray-600 hover:border-red-400"
-                          }`}
-                        >
-                          <div
-                            className={`w-full flex-1 rounded-[25px] flex items-center justify-center mb-4 ${activeProd.name === prod.name ? "bg-white/20" : "bg-white shadow-sm"}`}
-                          >
-                            <img
-                              src={prod.imgs[0]}
-                              alt={prod.name}
-                              className="max-h-40 object-contain"
-                            />
-                          </div>
-                          <span className="text-[11px] font-black uppercase tracking-wider">
-                            {prod.name}
-                          </span>
-                        </motion.div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
-          })}
+      <section className="py-12 md:py-20 px-4 md:px-6 max-w-7xl mx-auto">
+        
+        {/* HEADER SECTION */}
+        <div className="text-center mb-12 md:mb-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-gray-900"
+          >
+            Products & <span className="text-red-600">Services</span>
+          </motion.h2>
+          <p className="mt-4 text-gray-500 max-w-2xl mx-auto text-lg">
+            Explore our advanced industrial automation solutions designed for precision and durability.
+          </p>
         </div>
 
-        {/* 2. PRODUCT DETAILS SECTION */}
+        {/* 1. CATEGORY TABS (NEW LAYOUT) */}
+        <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => handleCatClick(cat)}
+              className={`px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-sm md:text-base tracking-wide transition-all duration-300 ${
+                activeCatId === cat.id
+                  ? "bg-red-600 text-white shadow-lg shadow-red-200 scale-105"
+                  : "bg-white text-gray-600 border border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+              }`}
+            >
+              {cat.title}
+            </button>
+          ))}
+        </div>
+
+        {/* 2. PRODUCT GRID FOR SELECTED CATEGORY (NEW LAYOUT) */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeProd.name}
+            key={activeCatId}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start bg-gray-50 p-6 md:p-16 rounded-[40px] border border-gray-100"
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 mb-20"
           >
-            <div className="space-y-6">
-              <div className="bg-white rounded-4xl p-6 md:p-12 shadow-inner flex items-center justify-center min-h-75 md:min-h-125">
-                <motion.img
-                  key={activeImgIndex}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  src={activeProd.imgs[activeImgIndex]}
-                  alt={activeProd.name}
-                  className="max-h-87.5 w-auto object-contain transition-transform duration-700"
-                />
-              </div>
-              {activeProd.imgs.length > 1 && (
-                <div className="flex gap-4 justify-center">
-                  {activeProd.imgs.map((img, idx) => (
-                    <div
-                      key={idx}
-                      onClick={() => setActiveImgIndex(idx)}
-                      className={`w-20 h-20 rounded-2xl border-2 p-2 cursor-pointer transition-all bg-white ${activeImgIndex === idx ? "border-red-500 scale-110 shadow-md" : "border-transparent opacity-60 hover:opacity-100"}`}
-                    >
-                      <img src={img} className="w-full h-full object-contain" />
+            {activeCategory.products.map((prod, idx) => (
+              <motion.div
+                key={idx}
+                whileHover={{ y: -8 }}
+                onClick={() => handleProdClick(prod)}
+                className={`group cursor-pointer rounded-3xl p-6 flex flex-col items-center justify-between text-center transition-all duration-300 border-2 ${
+                  activeProd.name === prod.name
+                    ? "bg-white border-red-600 shadow-xl ring-4 ring-red-50"
+                    : "bg-white border-transparent shadow-sm hover:shadow-xl hover:border-red-200"
+                }`}
+              >
+                {/* Product Image inside Grid */}
+                <div className="w-full h-40 md:h-48 bg-gray-50 rounded-2xl flex items-center justify-center p-4 mb-6 overflow-hidden relative">
+                  <img
+                    src={prod.imgs[0]}
+                    alt={prod.name}
+                    className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500"
+                  />
+                  {activeProd.name === prod.name && (
+                    <div className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-full">
+                      Viewing
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
-            </div>
+                
+                {/* Product Title inside Grid */}
+                <h3 className={`font-black text-lg uppercase leading-tight tracking-wide ${activeProd.name === prod.name ? "text-red-600" : "text-gray-900 group-hover:text-red-500"}`}>
+                  {prod.name}
+                </h3>
+                
+                <p className="mt-3 text-sm text-gray-500 line-clamp-2 leading-relaxed">
+                  {prod.desc}
+                </p>
 
-            <div className="flex flex-col h-full">
-              <span className="text-red-500 font-bold tracking-[0.2em] text-[10px] md:text-xs uppercase">
-                Product Specifications
-              </span>
-              <h4 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mt-2">
-                {activeProd.name}
-              </h4>
-              <div className="w-16 md:w-20 h-1.5 bg-red-500 rounded-full my-6"></div>
-              <p className="text-gray-600 text-sm md:text-lg leading-relaxed mb-8 text-justify">
-                {activeProd.desc}
-              </p>
-              {activeProd.features && (
-                <div className="bg-white/50 rounded-3xl p-6 md:p-8 border border-gray-200">
-                  <h5 className="font-bold text-gray-900 mb-4 uppercase tracking-wide text-sm">
-                    Key Capabilities:
-                  </h5>
-                  <ul className="space-y-3">
-                    {activeProd.features.map((feature, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-3 text-gray-600 text-sm md:text-base text-justify"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="mt-6 w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+                  <div className={`h-full transition-all duration-500 ${activeProd.name === prod.name ? "w-full bg-red-600" : "w-0 group-hover:w-full bg-red-300"}`}></div>
                 </div>
-              )}
-            </div>
+              </motion.div>
+            ))}
           </motion.div>
         </AnimatePresence>
 
-        {/* 3. VIDEO + ENQUIRY FORM SECTION */}
-        <div className="mt-20 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-          <div className="rounded-[40px] overflow-hidden bg-black aspect-video lg:aspect-auto relative shadow-2xl min-h-75">
+        {/* 3. PRODUCT DETAILS (ENHANCED LAYOUT) */}
+        <div ref={detailSectionRef} className="scroll-mt-24">
+            <AnimatePresence mode="wait">
+            <motion.div
+                key={activeProd.name}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.4 }}
+                className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                
+                {/* Image Gallery Side */}
+                <div className="bg-gray-50 p-8 md:p-16 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-gray-100">
+                  <div className="bg-white rounded-[30px] p-8 shadow-sm flex items-center justify-center min-h-[300px] md:min-h-[450px] mb-8 relative">
+                      <motion.img
+                        key={activeImgIndex}
+                        initial={{ opacity: 0, filter: "blur(10px)" }}
+                        animate={{ opacity: 1, filter: "blur(0px)" }}
+                        src={activeProd.imgs[activeImgIndex]}
+                        alt={activeProd.name}
+                        className="max-h-[350px] w-auto object-contain"
+                      />
+                  </div>
+                  
+                  {activeProd.imgs.length > 1 && (
+                      <div className="flex gap-4 justify-center flex-wrap">
+                      {activeProd.imgs.map((img, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => setActiveImgIndex(idx)}
+                            className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl border-2 p-2 transition-all bg-white overflow-hidden ${
+                                activeImgIndex === idx ? "border-red-600 scale-110 shadow-lg" : "border-gray-200 opacity-70 hover:opacity-100 hover:border-red-300"
+                            }`}
+                          >
+                            <img src={img} className="w-full h-full object-contain" alt="thumbnail" />
+                          </button>
+                      ))}
+                      </div>
+                  )}
+                </div>
+
+                {/* Content & Specs Side */}
+                <div className="p-8 md:p-16 flex flex-col h-full bg-white">
+                  <span className="inline-block text-red-600 font-black tracking-widest text-xs uppercase bg-red-50 px-4 py-2 rounded-full w-max mb-6">
+                      Technical Specifications
+                  </span>
+                  
+                  <h4 className="text-3xl md:text-5xl font-black text-gray-900 leading-tight mb-6">
+                      {activeProd.name}
+                  </h4>
+                  
+                  <div className="w-24 h-2 bg-red-600 rounded-full mb-8"></div>
+                  
+                  <p className="text-gray-600 text-lg md:text-xl leading-relaxed mb-10">
+                      {activeProd.desc}
+                  </p>
+                  
+                  {activeProd.features && (
+                      <div className="bg-gray-50 rounded-3xl p-6 md:p-8 border border-gray-100 mt-auto">
+                        <h5 className="font-bold text-gray-900 mb-6 uppercase tracking-wider flex items-center gap-3">
+                            <span className="w-3 h-3 bg-red-600 rounded-full"></span>
+                            Key Capabilities
+                        </h5>
+                        <ul className="space-y-4">
+                            {activeProd.features.map((feature, i) => (
+                            <li key={i} className="flex items-start gap-4 text-gray-700 md:text-lg">
+                                <svg className="w-6 h-6 text-red-600 shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span className="leading-relaxed">{feature}</span>
+                            </li>
+                            ))}
+                        </ul>
+                      </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+            </AnimatePresence>
+        </div>
+
+        {/* 4. VIDEO & ENQUIRY FORM */}
+        <div className="mt-16 md:mt-24 grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          
+          {/* Video Block */}
+          <div className="rounded-[40px] overflow-hidden bg-black aspect-video lg:aspect-auto relative shadow-2xl min-h-[350px]">
             {activeProd.video ? (
-              activeProd.video.includes("youtube.com") ||
-              activeProd.video.includes("youtu.be") ? (
+              activeProd.video.includes("youtube.com") || activeProd.video.includes("youtu.be") ? (
                 <iframe
                   key={activeProd.video}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full border-0 absolute inset-0"
                   src={activeProd.video}
                   title={activeProd.name}
-                  frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
               ) : (
                 <video
                   key={activeProd.video}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover absolute inset-0"
                   controls
                   autoPlay
                   muted
@@ -647,117 +665,97 @@ export default function Services() {
                 </video>
               )
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gray-900">
-                <p>Video demonstration coming soon for {activeProd.name}</p>
+              <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 p-8 text-center bg-gray-900 absolute inset-0">
+                <div className="w-20 h-20 mb-6 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                    <svg className="w-10 h-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <p className="text-xl font-bold text-white mb-2">Video In Production</p>
+                <p className="text-sm opacity-80 max-w-xs">High-definition technical footage for the {activeProd.name} will be available soon.</p>
               </div>
             )}
           </div>
 
-          <div className="bg-white rounded-[40px] p-8 md:p-12 border border-gray-200 shadow-sm">
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-              Ready to Upgrade?
-            </h3>
-            <p className="text-gray-500 mb-8 text-justify">
-              Fill out the form below and our technical experts will get back to
-              you shortly.
-            </p>
+          {/* Form Block */}
+          <div className="bg-white rounded-[40px] p-8 md:p-12 shadow-2xl border border-gray-100 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full -z-0"></div>
+            
+            <div className="relative z-10">
+              <h3 className="text-3xl md:text-4xl font-black text-gray-900 mb-3">
+                Request a Quote
+              </h3>
+              <p className="text-gray-500 mb-8 md:text-lg">
+                Connect with our engineers regarding <strong className="text-red-600">{activeProd.name}</strong> specifications.
+              </p>
 
-            <form
-              ref={formRef}
-              className="space-y-5"
-              onSubmit={handleFormSubmit}
-              noValidate
-            >
-              <div>
-                <label className="text-sm font-semibold text-gray-700 block ml-1 mb-1">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  className={`w-full border rounded-2xl p-4 focus:outline-none focus:ring-2 transition-all ${errors.name ? "border-red-500 focus:ring-red-200" : "border-gray-300 focus:ring-red-500"}`}
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  placeholder="John Doe"
-                />
-                {errors.name && (
-                  <p className="text-red-500 text-[10px] mt-1 ml-2 uppercase font-bold">
-                    {errors.name}
-                  </p>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <form ref={formRef} className="space-y-6" onSubmit={handleFormSubmit} noValidate>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700 block ml-1 mb-1">
-                    Email Address *
-                  </label>
+                  <label className="text-xs font-bold text-gray-500 uppercase ml-1 mb-2 block tracking-wider">Full Name</label>
                   <input
-                    type="email"
-                    className={`w-full border rounded-2xl p-4 focus:outline-none focus:ring-2 transition-all ${errors.email ? "border-red-500 focus:ring-red-200" : "border-gray-300 focus:ring-red-500"}`}
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    placeholder="john@example.com"
+                    type="text"
+                    name="name"
+                    className={`w-full bg-gray-50 border-2 rounded-2xl p-4 focus:outline-none transition-all ${errors.name ? "border-red-500 bg-red-50/50" : "border-gray-100 focus:border-red-500 focus:bg-white"}`}
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Enter your name"
                   />
-                  {errors.email && (
-                    <p className="text-red-500 text-[10px] mt-1 ml-2 uppercase font-bold">
-                      {errors.email}
-                    </p>
-                  )}
+                  {errors.name && <p className="text-red-500 text-[10px] mt-2 font-bold uppercase">{errors.name}</p>}
                 </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="text-xs font-bold text-gray-500 uppercase ml-1 mb-2 block tracking-wider">Email Address</label>
+                    <input
+                      type="email"
+                      name="email"
+                      className={`w-full bg-gray-50 border-2 rounded-2xl p-4 focus:outline-none transition-all ${errors.email ? "border-red-500 bg-red-50/50" : "border-gray-100 focus:border-red-500 focus:bg-white"}`}
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="name@company.com"
+                    />
+                    {errors.email && <p className="text-red-500 text-[10px] mt-2 font-bold uppercase">{errors.email}</p>}
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-gray-500 uppercase ml-1 mb-2 block tracking-wider">Phone Number</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      className={`w-full bg-gray-50 border-2 rounded-2xl p-4 focus:outline-none transition-all ${errors.phone ? "border-red-500 bg-red-50/50" : "border-gray-100 focus:border-red-500 focus:bg-white"}`}
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="10-digit number"
+                    />
+                    {errors.phone && <p className="text-red-500 text-[10px] mt-2 font-bold uppercase">{errors.phone}</p>}
+                  </div>
+                </div>
+
                 <div>
-                  <label className="text-sm font-semibold text-gray-700 block ml-1 mb-1">
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    className={`w-full border rounded-2xl p-4 focus:outline-none focus:ring-2 transition-all ${errors.phone ? "border-red-500 focus:ring-red-200" : "border-gray-300 focus:ring-red-500"}`}
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    placeholder="9876543210"
-                  />
-                  {errors.phone && (
-                    <p className="text-red-500 text-[10px] mt-1 ml-2 uppercase font-bold">
-                      {errors.phone}
-                    </p>
-                  )}
+                  <label className="text-xs font-bold text-gray-500 uppercase ml-1 mb-2 block tracking-wider">Project Requirements</label>
+                  <textarea
+                    name="details"
+                    rows={4}
+                    className={`w-full bg-gray-50 border-2 rounded-2xl p-4 focus:outline-none transition-all resize-none ${errors.details ? "border-red-500 bg-red-50/50" : "border-gray-100 focus:border-red-500 focus:bg-white"}`}
+                    value={formData.details}
+                    onChange={handleInputChange}
+                    placeholder="Briefly describe your industrial requirements..."
+                  ></textarea>
+                  {errors.details && <p className="text-red-500 text-[10px] mt-2 font-bold uppercase">{errors.details}</p>}
                 </div>
-              </div>
 
-              <div>
-                <label className="text-sm font-semibold text-gray-700 block ml-1 mb-1">
-                  Project Details *
-                </label>
-                <textarea
-                  rows={4}
-                  className={`w-full border rounded-2xl p-4 focus:outline-none focus:ring-2 transition-all ${errors.details ? "border-red-500 focus:ring-red-200" : "border-gray-300 focus:ring-red-500"}`}
-                  value={formData.details}
-                  onChange={(e) =>
-                    setFormData({ ...formData, details: e.target.value })
-                  }
-                  placeholder="Tell us about your welding requirements..."
-                ></textarea>
-                {errors.details && (
-                  <p className="text-red-500 text-[10px] mt-1 ml-2 uppercase font-bold">
-                    {errors.details}
-                  </p>
-                )}
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSending}
-                className={`w-full bg-black text-white py-5 rounded-2xl font-bold text-lg transition-all shadow-lg active:scale-95 ${isSending ? "bg-gray-500 cursor-not-allowed" : "hover:bg-red-500"}`}
-              >
-                {isSending ? "Processing..." : "Submit Enquiry"}
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  disabled={isSending}
+                  className={`w-full py-5 rounded-2xl font-black text-lg uppercase tracking-wider transition-all shadow-lg active:scale-[0.98] ${
+                    isSending ? "bg-gray-400 text-white cursor-not-allowed" : "bg-gray-900 text-white hover:bg-red-600 hover:shadow-red-200"
+                  }`}
+                >
+                  {isSending ? "Processing Request..." : "Submit Technical Enquiry"}
+                </button>
+              </form>
+            </div>
           </div>
+
         </div>
       </section>
     </div>
