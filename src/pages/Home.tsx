@@ -14,22 +14,22 @@ const solutions = [
     img: "/screen5/5ma2.svg",
   },
   {
-    title: "Plasma Transferred Arc Welding",
+    title: "Plasma Transferred Arc Welding System",
     desc: "Our PTA welding systems provide precise hardfacing and cladding solutions with superior material control and repeatability.",
     img: "/screen5/5ma3.svg",
   },
   {
-    title: "CNC Cutting Systems",
+    title: "Plasma CNC Machine",
     desc: "Automated CNC cutting solutions delivering accuracy, efficiency, and clean cuts for industrial fabrication requirements.",
     img: "/screen5/5ma4.svg",
   },
   {
-    title: "Welding Rotators",
+    title: "Welding Rotator",
     desc: "Engineered for safe and efficient rotation of cylindrical components, ensuring uniform weld quality and operator safety.",
     img: "/screen5/5ma5.svg",
   },
   {
-    title: "Special Purpose Machines (SPMs)",
+    title: "Port Welding Machine SPM",
     desc: "Tailor-made automation and welding SPMs designed to meet unique production and process requirements.",
     img: "/screen5/5ma6.svg",
   },
@@ -268,8 +268,8 @@ export default function App() {
   const activeTestimonial = testimonials[currentTestimonial];
 
   return (
-    <div className="w-full min-h-screen hero-font">
-      {/* NAVBAR */}
+    <div className="w-full min-h-screen hero-font relative">
+      {/* NAVBAR AREA (Assumption: there is a fixed navbar here) */}
 
       {/* HERO SECTION */}
       <section className="relative h-screen overflow-hidden">
@@ -287,7 +287,7 @@ export default function App() {
         </video>
 
         {/* DARK OVERLAY */}
-        <div className="absolute inset-0 /40"></div>
+        <div className="absolute inset-0 bg-black/40"></div>
 
         {/* HERO TEXT */}
         <div className="relative z-10 mt-12 h-full flex items-center">
@@ -316,7 +316,6 @@ export default function App() {
                 Enquire Now
               </button>
 
-              {/* EXPLORE SOLUTIONS BUTTON */}
               <a 
                 href="/services" 
                 className="bg-black text-white shadow-2xl px-6 py-3 rounded-lg border border-white/10 flex items-center justify-center hover:bg-gray-900 transition-colors"
@@ -328,18 +327,19 @@ export default function App() {
         </div>
       </section>
 
+      {/* MODAL POPUP FORM (FIXED ALIGNMENT) */}
       {openForm && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-8 relative">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[999] px-4 pt-20 pb-10">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 md:p-8 relative max-h-[85vh] overflow-y-auto custom-scrollbar">
             {/* Close Button */}
             <button
               onClick={() => setOpenForm(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl"
+              className="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl font-bold w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-red-100 hover:text-red-600 transition-colors"
             >
               ×
             </button>
 
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800 mt-2">
               Request an Enquiry
             </h2>
 
@@ -352,44 +352,44 @@ export default function App() {
             >
               {/* Name */}
               <div>
-                <label className="text-sm text-gray-600">Full Name *</label>
+                <label className="text-sm text-gray-600 font-semibold">Full Name *</label>
                 <input
                   type="text"
                   required
                   minLength={3}
                   pattern=".*\S.*"
                   title="Please enter at least 3 characters"
-                  className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-black"
+                  className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
                 />
               </div>
 
               {/* Email */}
               <div>
-                <label className="text-sm text-gray-600">Email Address *</label>
+                <label className="text-sm text-gray-600 font-semibold">Email Address *</label>
                 <input
                   type="email"
                   required
                   pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                   title="Please enter a valid email"
-                  className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-black"
+                  className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
                 />
               </div>
 
               {/* Phone */}
               <div>
-                <label className="text-sm text-gray-600">Phone Number *</label>
+                <label className="text-sm text-gray-600 font-semibold">Phone Number *</label>
                 <input
                   type="tel"
                   required
                   pattern="[0-9]{10}"
                   title="Enter a valid 10-digit phone number"
-                  className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-black"
+                  className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
                 />
               </div>
 
               {/* Requirement */}
               <div>
-                <label className="text-sm text-gray-600">
+                <label className="text-sm text-gray-600 font-semibold">
                   Requirement Details *
                 </label>
                 <textarea
@@ -397,23 +397,23 @@ export default function App() {
                   minLength={10}
                   title="Please enter at least 10 characters"
                   rows={4}
-                  className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-black"
+                  className="w-full border border-gray-300 rounded-md p-3 mt-1 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors resize-none"
                 ></textarea>
               </div>
 
               {/* Buttons */}
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex justify-end gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => setOpenForm(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
+                  className="px-5 py-2 border border-gray-300 font-medium rounded-md hover:bg-gray-100 transition-colors"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-black text-white rounded-md hover:bg-gray-800"
+                  className="px-6 py-2 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition-colors"
                 >
                   Send Enquiry
                 </button>
@@ -597,11 +597,11 @@ export default function App() {
             <span className="text-gray-800">Solutions</span>
           </h2>
 
-          {/* Grid - UPDATED TO CLICKABLE LINKS */}
+          {/* Grid - CLICKABLE LINKS */}
           <div className="grid md:grid-cols-2 gap-8 md:gap-12">
             {solutions.map((item, index) => (
               <a
-                href={`/services?machine=${encodeURIComponent(item.title)}`}
+                href={`/services?prod=${encodeURIComponent(item.title)}`}
                 key={index}
                 className="group flex items-center justify-between gap-8 bg-white p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-red-100 cursor-pointer"
               >
@@ -632,14 +632,14 @@ export default function App() {
             ))}
           </div>
 
-          {/* Bottom Button */}
+          {/* Bottom Button - CHANGED TO EXPLORE SOLUTIONS LINK */}
           <div className="flex justify-center mt-16">
-            <button
-              className="border border-gray-300 bg-white shadow-sm px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-              onClick={() => setOpenForm(true)}
+            <a
+              href="/services"
+              className="border border-gray-300 bg-white shadow-sm px-10 py-3 rounded-lg font-bold text-gray-800 hover:bg-gray-100 hover:text-red-600 hover:border-red-300 transition-colors uppercase tracking-widest text-sm"
             >
-              Enquire Now
-            </button>
+              Explore All Solutions
+            </a>
           </div>
         </div>
       </section>

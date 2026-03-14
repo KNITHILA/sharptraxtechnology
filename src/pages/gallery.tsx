@@ -425,8 +425,8 @@ export default function Gallery() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            // --- FIX IS HERE: Added heavy padding (p-6 md:p-12) to force the modal away from screen edges ---
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-6 md:p-12"
+            // --- FIX IS HERE: Added heavy top padding (pt-24 md:pt-32) so it never touches the Navbar ---
+            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-md px-4 pb-6 pt-24 md:px-12 md:pb-12 md:pt-32"
             onClick={() => setSelectedItem(null)} // Close when clicking outside
           >
             {/* Modal Content Box */}
@@ -435,8 +435,8 @@ export default function Gallery() {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              // --- FIX IS HERE: Used max-h-full so it takes 100% of the padded safe area, not the raw screen area ---
-              className="relative w-full max-w-5xl bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden max-h-full"
+              // --- FIX IS HERE: Restricted height to 80vh to guarantee it stays perfectly centered ---
+              className="relative w-full max-w-5xl bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden max-h-[80vh] md:max-h-[75vh]"
               onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside the box
             >
               
