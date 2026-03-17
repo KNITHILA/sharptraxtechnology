@@ -218,7 +218,7 @@ export default function Footer() {
 
         {/* BOTTOM */}
         <div className="flex flex-col md:flex-row justify-between items-center mt-16 pt-6 border-t border-gray-300 md:border-none text-xs text-gray-600 gap-4 text-center md:text-left">
-          <p>© Copyright Sharptrax Technologies. All Rights Reserved</p>
+          <p>© Copyright Sharptrax Technologies. All Rights Reserved by Nextera</p>
         </div>
 
         {/* MODAL FORM - Functional Integration */}

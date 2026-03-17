@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 // --- TYPESCRIPT INTERFACES ---
 interface Product {
@@ -7,7 +7,7 @@ interface Product {
   desc: string;
   features?: string[];
   imgs: string[];
-  video?: string;
+  videos?: string[];
 }
 
 interface Category {
@@ -19,7 +19,8 @@ interface Category {
 interface GalleryItem {
   url: string;
   name: string;
-  category: string;
+  categoryTitle: string;
+  categoryId: string;
   productData: Product;
 }
 
@@ -42,7 +43,7 @@ const categories: Category[] = [
           "/servicemachines/welding automation/1/mac1.3.jpg",
           "/servicemachines/welding automation/1/mac1.4.jpg",
         ],
-        video: "/servicemachines/welding automation/1/mac1.mp4",
+        videos: ["/servicemachines/welding automation/1/mac1.mp4"],
       },
       {
         name: "Plasma Transferred Arc Welding System",
@@ -57,7 +58,7 @@ const categories: Category[] = [
           "/servicemachines/welding automation/2/mac2.3.jpg",
           "/servicemachines/welding automation/2/mac2.4.jpg",
         ],
-        video: "/servicemachines/welding automation/2/mac2.mp4",
+        videos: ["/servicemachines/welding automation/2/mac2.mp4"],
       },
       {
         name: "Welding Rotator",
@@ -74,7 +75,7 @@ const categories: Category[] = [
           "/servicemachines/welding automation/3/mac3.3.jpg",
           "/servicemachines/welding automation/3/mac3.4.jpg",
         ],
-        video: "https://www.youtube.com/embed/cBOZVaN1GsM?si=LuCX_UTH5Y9NGtGj",
+        videos: ["https://www.youtube.com/embed/cBOZVaN1GsM?si=LuCX_UTH5Y9NGtGj"],
       },
       {
         name: "Pull-Through Welding Automation System",
@@ -85,7 +86,7 @@ const categories: Category[] = [
           "/servicemachines/welding automation/4/mac4.3.jpg",
           "/servicemachines/welding automation/4/mac4.4.jpg",
         ],
-        video: "https://www.youtube.com/embed/G5TqVsDJ62o?si=METj7Kg_ixayYyuS",
+        videos: ["https://www.youtube.com/embed/G5TqVsDJ62o?si=METj7Kg_ixayYyuS"],
       },
       {
         name: "MIG-Welding System",
@@ -96,7 +97,7 @@ const categories: Category[] = [
           "/servicemachines/welding automation/5/mac5.3.jpg",
           "/servicemachines/welding automation/5/mac5.4.jpg",
         ],
-        video: "https://www.youtube.com/embed/Z9gzJC5pDxM?si=ww20AIUTtnhd93lq",
+        videos: ["https://www.youtube.com/embed/Z9gzJC5pDxM?si=ww20AIUTtnhd93lq"],
       },
       {
         name: "TIG Longitudinal Welding SPM",
@@ -107,7 +108,7 @@ const categories: Category[] = [
           "/servicemachines/welding automation/6/mac6.3.jpg",
           "/servicemachines/welding automation/6/mac6.4.jpg",
         ],
-        video: "https://www.youtube.com/embed/cwhK_j6G0Jk?si=U_lvArkXTWm9FX8j",
+        videos: ["https://www.youtube.com/embed/cwhK_j6G0Jk?si=U_lvArkXTWm9FX8j"],
       },
       {
         name: "SAW-Submerged Arc Welding",
@@ -142,7 +143,7 @@ const categories: Category[] = [
           "/servicemachines/welding automation/9/mac9.3.jpg",
           "/servicemachines/welding automation/9/mac9.4.jpg",
         ],
-        video: "/servicemachines/welding automation/9/mac9.mp4",
+        videos: ["/servicemachines/welding automation/9/mac9.mp4"],
       },
       {
         name: "Head & Tailstock Units",
@@ -167,8 +168,7 @@ const categories: Category[] = [
         name: "Hydraulic End Cap Welding SPM",
         desc: "The Hydraulic End Cap Welding SPM is a specialized machine designed for precise and efficient welding of end caps with hydraulic control. It ensures stable positioning, uniform weld quality, and enhanced productivity for industrial applications.",
         features: [
-          "Versatile Application Range – Engineered to be suitable for a wide range of industrial welding jobs and workpiece types.",
-          "Specialized Hydraulic Solutions – Specifically designed for high-precision welding of hydraulic cylinder components.",
+          "Advanced PLC Control – Utilizes a PLC-controlled weld sequence for precise automation and consistent weld bead quality.",
           "Integrated Steady Rest – Equipped with a steady rest to ensure stable support and ease of operation during loading and unloading.",
           "Flexible Diameter Capacity – Available in various sizes to accommodate workpiece diameters ranging from 50 mm to 300 mm.",
           "Heavy-Duty Construction – Features a solid, robust build optimized for superior weight balancing and vibration-free operation.",
@@ -182,6 +182,68 @@ const categories: Category[] = [
           "/servicemachines/welding automation/11/mac11.4.jpg",
         ],
       },
+      {
+        name: "TANKWELD-PRO Automated Tank Welding Solution",
+        desc: "An ultra-high precision, ultra-heavy duty gantry-style automated welding system. Designed to seamlessly fuse thick metal tubes and end caps into airtight, high-integrity pressure vessels and storage tanks.",
+        features: [
+          "Automated Seam Tracking & Joint Sensing",
+          "High-Deposition multi-process welding (MIG, TIG, Sub-Arc compatible)",
+          "Consistent, defect-free weld quality with reduce spatter",
+          "Significantly reduces manual operator labor and associated costs",
+          "Multi-pass capability for thick-walled vessels with robust weld joint designs",
+          "Tank Diameter Range: 300 mm to 2 m | Tank Length Range: 300 mm to 3 m",
+          "Multi-Axis PLC Control with HMI Touch Interface",
+        ],
+        imgs: [
+          "/servicemachines/pipe_vessel_welder/gantry_photo_1.png",
+          "/servicemachines/pipe_vessel_welder/labeled_photo_1.png",
+          "/servicemachines/pipe_vessel_welder/brochure_view_1.png",
+        ],
+        videos: [
+          "/servicemachines/membrane/mac21.2.mp4",
+          "/servicemachines/membrane/mac21.3.mp4",
+        ],
+      },
+      {
+        name: "Robotic Gantry Automation",
+        desc: "Robotic Gantry Automation is a cornerstone of Sharptrax Technologies’ heavy-duty manufacturing solutions. By utilizing overhead gantry systems integrated with high-performance robotics, we provide expansive work envelopes and superior flexibility for large-scale welding and assembly tasks.",
+        features: [
+          "Overhead configurations maximize floor space and allow for handling large, heavy workpieces.",
+          "Multi-axis gantry movement combined with robotic precision ensures consistent, high-quality welds.",
+        ],
+        imgs: [
+          "/servicemachines/welding automation/12/mac12.1.jpg",
+          "/servicemachines/welding automation/12/mac12.2.jpg",
+          "/servicemachines/welding automation/12/mac12.3.jpg",
+          "/servicemachines/welding automation/12/mac12.4.jpg",
+        ],
+      },
+      {
+        name: "Robotic Trolley Welding",
+        desc: "Sharptrax Technologies’ Robotic Trolley Welding systems provide an agile solution for manufacturing environments requiring mobility and flexibility. By mounting robotic arms on synchronized automated trolleys, we enable the system to traverse linear tracks.",
+        features: [
+          "Linear track integration allows for a single robotic unit to service multiple welding fixtures.",
+          "High-precision servo-driven trolleys ensure seamless synchronization.",
+        ],
+        imgs: [
+          "/servicemachines/welding automation/13/mac13.1.jpg",
+          "/servicemachines/welding automation/13/mac13.2.jpg",
+        ],
+      },
+      {
+        name: "Material Tilter",
+        desc: "Sharptrax Technologies’ Material Tilters are engineered for high-stability tilting of heavy job components across diverse industrial applications. Built with a solid construction for optimal weight balancing.",
+        features: [
+          "Available in both motorized and hydraulic-based configurations.",
+          "Advanced PLC and servo-controlled options available for high precision.",
+        ],
+        imgs: [
+          "/servicemachines/welding automation/14/mac14.1.jpg",
+          "/servicemachines/welding automation/14/mac14.2.jpg",
+          "/servicemachines/welding automation/14/mac14.3.jpg",
+          "/servicemachines/welding automation/14/mac14.4.jpg",
+        ],
+      },
     ],
   },
   {
@@ -190,12 +252,10 @@ const categories: Category[] = [
     products: [
       {
         name: "Welding Positioners",
-        desc: "At Sharptrax Technologies, our welding positioners are designed to enhance efficiency, precision, and safety in welding operations. These advanced positioning systems allow welders to rotate and tilt workpieces into the optimal position, ensuring better accessibility, reduced strain, and improved weld quality.",
+        desc: "At Sharptrax Technologies, our welding positioners are designed to enhance efficiency, precision, and safety in welding operations. These advanced positioning systems allow welders to rotate and tilt workpieces into the optimal position.",
         features: [
-          "Wide Load Capacity Range – Available in various weight load capacities ranging from 50 kg to 20 tons.",
-          "Adjustable Center of Gravity – Engineered to accommodate a center of gravity from 75 mm to 300 mm.",
-          "Versatile Loading Options – Designed to handle both eccentric and non-eccentric job loads with precision.",
-          "Customizable Tilt Table – Features a tilt table design that can be fully customized to meet specific project requirements.",
+          "Wide Load Capacity Range – Available from 50 kg to 20 tons.",
+          "Adjustable Center of Gravity – Engineered for 75 mm to 300 mm ranges.",
         ],
         imgs: [
           "/servicemachines/welding positioners/1/pos1.1.jpg",
@@ -203,19 +263,14 @@ const categories: Category[] = [
           "/servicemachines/welding positioners/1/pos1.3.jpg",
           "/servicemachines/welding positioners/1/pos1.4.jpg",
         ],
-        video: "https://www.youtube.com/embed/o1akniqVvt0?si=mPwanL_oIURSJjcU",
+        videos: ["https://www.youtube.com/embed/o1akniqVvt0?si=mPwanL_oIURSJjcU"],
       },
       {
         name: "L-Type Positioner",
-        desc: "Sharptrax offers extensive range of L type Positioners for manipulating various types of components, Servo/VFD driven for positioning the arms. We also integrate/synchronize with third party Robot to accomplish complete welding process.",
+        desc: "Sharptrax offers extensive range of L type Positioners for manipulating various types of components, Servo/VFD driven for positioning the arms.",
         features: [
-          "High Positioning Accuracy – Engineered for precision-driven operations with exceptional position accuracy.",
-          "Dual-Axis Servo Control – Features two-axis control powered by high-performance servo drives and motors.",
-          "Advanced PLC Integration – Includes a PLC control option for automated and reliable sequence management.",
-          "Robotic Compatibility – Designed for seamless integration with industrial robots to enhance automation.",
-          "Maximum Efficiency – Optimized to maximize both operational efficiency and welding accuracy.",
-          "Superior Material Handling – Provides excellent material handling capabilities for various workpiece sizes.",
-          "Full Rotational Range – Equipped with 360-degree rotation ability for unrestricted access and positioning.",
+          "Full Rotational Range – Equipped with 360-degree rotation.",
+          "Dual-Axis Servo Control – Powered by high-performance servo drives.",
         ],
         imgs: [
           "/servicemachines/welding positioners/2/pos2.1.jpg",
@@ -226,7 +281,7 @@ const categories: Category[] = [
       },
       {
         name: "Scissor Rollers",
-        desc: "Sharptrax offers very high quality Scissor Rollers, which can be used to hold your pipe as a support for your existing machines and can be used as standalone device for pipe support.",
+        desc: "Sharptrax offers very high quality Scissor Rollers, which can be used to hold your pipe as a support for your existing machines.",
         imgs: [
           "/servicemachines/welding positioners/3/pos3.1.jpg",
           "/servicemachines/welding positioners/3/pos3.2.jpg",
@@ -236,7 +291,7 @@ const categories: Category[] = [
       },
       {
         name: "Welding Turn Table",
-        desc: "We offer excellent quality range of Welding Positioners (Manipulators) that are made from quality raw material. Widely used in various industrial applications, our Positioners position you for maximum flexibility and efficiency. This can also be integrated with Robotic welding automation.",
+        desc: "We offer excellent quality range of Welding Positioners (Manipulators) that are made from quality raw material. Widely used in various industrial applications.",
         imgs: [
           "/servicemachines/welding positioners/4/pos4.1.jpg",
           "/servicemachines/welding positioners/4/pos4.2.jpg",
@@ -252,12 +307,10 @@ const categories: Category[] = [
     products: [
       {
         name: "Plasma CNC Machine",
-        desc: "At Sharptrax Technologies, we specialize in trading high-quality Plasma CNC Cutting Machines designed for precision cutting, high-speed performance, and superior efficiency. Our Plasma CNC machines are ideal for industries requiring accurate metal cutting solutions with advanced automation.",
+        desc: "At Sharptrax Technologies, we specialize in trading high-quality Plasma CNC Cutting Machines designed for precision cutting, high-speed performance, and superior efficiency.",
         features: [
-          "High-Precision Cutting – Delivers smooth, clean, and accurate cuts across various metal thicknesses with minimal material wastage.",
-          "CNC-Controlled Automation – Ensures highly efficient and repeatable cutting processes through advanced, user-friendly programming interfaces.",
-          "Heavy-Duty Build – Constructed with a robust frame to handle high-speed industrial operations while maintaining long-term stability.",
-          "Clean Edge Finish – Optimized plasma technology reduces dross and secondary finishing requirements, saving operational time.",
+          "High-Precision Cutting – Accurate cuts across various metal thicknesses.",
+          "CNC-Controlled Automation – User-friendly programming interfaces.",
         ],
         imgs: [
           "/servicemachines/plasma cnc/mac1.1.jpg",
@@ -274,12 +327,10 @@ const categories: Category[] = [
     products: [
       {
         name: "Torch Weaving Unit",
-        desc: "At Sharptrax Technologies, our Torch Weaving Unit, also known as the Welding Weaving Unit, is designed to enhance welding precision and efficiency by introducing a controlled weaving motion to the welding torch. This advanced system ensures uniform bead formation, improved penetration, and better fusion, making it ideal for critical and high-strength welding applications.",
+        desc: "At Sharptrax Technologies, our Torch Weaving Unit is designed to enhance welding precision by introducing a controlled weaving motion to the welding torch.",
         features: [
-          "High Precision Torch Weaving – Specifically engineered for PTAW, TIG, MIG, and SAW applications with superior accuracy.",
-          "Advanced Linear Motion – Achieved through standard LM bush/linear bearings combined with ball screw transmission for maximum durability.",
-          "Precise Width Control – Offers a 0 – 40 mm weaving width precisely managed via micro-controller or PLC integration.",
-          "Industrial Grade Reliability – Built for high-performance welding environments requiring consistent and repeatable motion.",
+          "Precise Width Control – Offers a 0 – 40 mm weaving width.",
+          "Advanced Linear Motion – Ball screw transmission for maximum durability.",
         ],
         imgs: [
           "/servicemachines/machine accessories/1/acc1.1.jpg",
@@ -290,7 +341,7 @@ const categories: Category[] = [
       },
       {
         name: "AVC Unit",
-        desc: "At Sharptrax Technologies, we manufacture Automatic Voltage Controller (AVC) unit for TIG and Plasma welding process. AVC units are built with LM guideway slides and Servo Motors for precise control height adjustments. AVC units are being used for moving the welding torch vertically, in order to maintain gap between the torch and the job irrespective of its ovality.",
+        desc: "Automatic Voltage Controller (AVC) unit for TIG and Plasma welding process. Built with LM guideway slides and Servo Motors.",
         imgs: [
           "/servicemachines/machine accessories/2/acc2.1.jpg",
           "/servicemachines/machine accessories/2/acc2.2.jpg",
@@ -298,13 +349,10 @@ const categories: Category[] = [
       },
       {
         name: "Laser Seam Tracking Unit",
-        desc: "At Sharptrax Technologies, our Laser Seam Tracking Unit enables tracking of almost all weld joints to avoid manual intervention. It is independently developed, convenient to operate and easy to teach. It features premium optical components compatible with all major robot brands. The unit includes seam finding and tracking functions, a host control unit with an accurate algorithm, and an internal airway design.",
+        desc: "Our Laser Seam Tracking Unit enables tracking of almost all weld joints to avoid manual intervention. Compatible with all major robot brands.",
         features: [
-          "Automatic Real-Time Detection – Enhances welding precision by automatically detecting and adjusting to seam variations during operation.",
-          "Consistent Weld Quality – Engineered to maintain high-quality, repeatable weld beads by compensating for real-time changes.",
-          "Error Reduction – Significantly reduces defects and manual rework through advanced automated tracking sensors.",
-          "High Process Efficiency – Improves the overall speed and reliability of automated welding workflows.",
-          "Precision Laser Guidance – Utilizes high-precision laser technology to ensure the torch follows the exact seam path.",
+          "Automatic Real-Time Detection – Adjusts to seam variations during operation.",
+          "Precision Laser Guidance – Ensures the torch follows exact seam path.",
         ],
         imgs: [
           "/servicemachines/machine accessories/3/acc3.1.jpg",
@@ -315,7 +363,7 @@ const categories: Category[] = [
       },
       {
         name: "Welding Torch",
-        desc: "At Sharptrax Technologies, we manufacture high quality PTA (Plasma Transferred Arc) welding Torches for all your hardfacing/cladding applications, we also build customised water cooled PTA OD and ID Torches for high deposition stellite, colmonoy and various alloy powder overlaying.",
+        desc: "We manufacture high quality PTA (Plasma Transferred Arc) welding Torches for all your hardfacing/cladding applications.",
         imgs: [
           "/servicemachines/machine accessories/4/acc4.1.jpg",
           "/servicemachines/machine accessories/4/acc4.2.jpg",
@@ -324,39 +372,52 @@ const categories: Category[] = [
       },
       {
         name: "Cross Slides",
-        desc: "At Sharptrax Technologies, we manufacture cross slide Units for Torch manipulation, LM rails and lead screw combination makes the transmission so smooth, Different payloads and various stroke length slides are being made for several applications.",
+        desc: "We manufacture cross slide Units for Torch manipulation using LM rails and lead screw combinations.",
         imgs: ["/servicemachines/machine accessories/5/acc5.1.jpg"],
+      },
+    ],
+  },
+  {
+    id: "membrane-panel",
+    title: "Membrane Panel Welding Machine",
+    products: [
+      {
+        name: "Membrane Panel Welding System",
+        desc: "Our state-of-the-art membrane panel welding line is designed to seamlessly fuse steel tubes and fin bars into high-quality, airtight membrane panels. Built with a robust, vibration-dampening frame, the system integrates advanced multi-head welding technology with heavy-duty material handling to maximize your production output.",
+        imgs: [
+          "/servicemachines/membrane/mac20.1.jpg", 
+        ],
+        videos: [
+          "/servicemachines/membrane/mac21.2.mp4"
+        ]
       },
     ],
   },
 ];
 
 export default function Gallery() {
-  const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
+  const navigate = useNavigate();
 
-  // Stop background scrolling when the popup is open
-  useEffect(() => {
-    if (selectedItem) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [selectedItem]);
-
-  // Flatten the array to easily map all images
+  // Flatten the array to easily map all images for the main grid
+  // We pass the category ID and the product name so the URL parameters can be built properly
   const allGalleryItems: GalleryItem[] = categories.flatMap((category) =>
     category.products.flatMap((product) =>
       product.imgs.map((imgUrl) => ({
         url: imgUrl,
         name: product.name,
-        category: category.title,
+        categoryTitle: category.title,
+        categoryId: category.id,
         productData: product, 
       }))
     )
   );
+
+  // Navigation handler
+  const handleImageClick = (categoryId: string, productName: string) => {
+    // Navigates to the exact same URL structure the Navbar uses to open the specific machine
+    navigate(`/services?cat=${categoryId}&prod=${encodeURIComponent(productName)}`);
+    window.scrollTo(0, 0); // Ensure the page starts at the top
+  };
 
   return (
     <div className="w-full min-h-screen bg-white pb-20 relative">
@@ -370,161 +431,57 @@ export default function Gallery() {
         </h1>
         <div className="w-24 h-2 bg-red-600 mx-auto rounded-full mb-6"></div>
         <p className="text-gray-500 text-sm md:text-base max-w-3xl mx-auto uppercase tracking-widest font-medium">
-          Showcasing our high-precision welding automation & industrial
-          solutions
+          Showcasing our high-precision welding automation & industrial solutions
         </p>
       </div>
 
       {/* Full-Width Grid Container */}
-      <div className="w-full px-4 md:px-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8">
+      <div className="w-full px-4 md:px-10 max-w-screen-2xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-10">
           {allGalleryItems.map((item, index) => (
-            <div 
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.4, delay: index % 10 * 0.05 }} // Staggered loading effect
               key={index} 
-              className="group flex flex-col items-center cursor-pointer"
-              onClick={() => setSelectedItem(item)} 
+              className="group flex flex-col cursor-pointer"
+              onClick={() => handleImageClick(item.categoryId, item.name)} 
             >
-              {/* Responsive Image Container */}
-              <div className="relative aspect-4/3 w-full overflow-hidden rounded-xl bg-gray-50 border border-gray-100 shadow-sm transition-all duration-500 group-hover:shadow-2xl group-hover:border-red-500/20">
+              {/* Responsive Image Container - Sharp edges (rounded-sm) and bigger presentation */}
+              <div className="relative aspect-4/3 w-full overflow-hidden rounded-sm bg-gray-50 border border-gray-200 transition-all duration-500 group-hover:border-red-500/50 group-hover:shadow-xl">
                 <img
                   src={item.url}
                   alt={item.name}
                   className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   loading="lazy"
                 />
-                {/* Subtle Overlay on Hover */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                  <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-semibold tracking-widest text-sm bg-black/50 px-4 py-2 rounded-lg backdrop-blur-sm">
-                    VIEW DETAILS
+                
+                {/* Solid Color Overlay on Hover */}
+                <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/40 transition-colors duration-300 flex flex-col items-center justify-center p-4">
+                  <span className="text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 font-bold tracking-widest text-xs border border-white/50 px-6 py-3 rounded-sm backdrop-blur-sm hover:bg-red-600 hover:border-red-600">
+                    VIEW SPECIFICATIONS
                   </span>
                 </div>
               </div>
 
               {/* Text Label Section */}
-              <div className="mt-5 text-center px-2">
-                <h3 className="text-xs md:text-sm font-extrabold text-gray-900 uppercase tracking-tighter leading-tight transition-colors duration-300 group-hover:text-red-600">
+              <div className="mt-4 px-2">
+                <h3 className="text-sm md:text-base font-black text-gray-900 uppercase tracking-tight leading-tight transition-colors duration-300 group-hover:text-red-600 truncate">
                   {item.name}
                 </h3>
-                <div className="flex items-center justify-center gap-2 mt-1">
-                  <span className="h-px w-3 bg-gray-300 group-hover:bg-red-500 transition-colors"></span>
-                  <span className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em]">
-                    {item.category}
+                <div className="flex items-center gap-2 mt-1.5">
+                  <span className="h-px w-4 bg-gray-300 group-hover:bg-red-500 transition-colors"></span>
+                  <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest truncate">
+                    {item.categoryTitle}
                   </span>
                   <span className="h-px w-3 bg-gray-300 group-hover:bg-red-500 transition-colors"></span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
-
-      {/* MODAL / POPUP OVERLAY */}
-      <AnimatePresence>
-        {selectedItem && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            // --- FIX IS HERE: Added heavy top padding (pt-24 md:pt-32) so it never touches the Navbar ---
-            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-md px-4 pb-6 pt-24 md:px-12 md:pb-12 md:pt-32"
-            onClick={() => setSelectedItem(null)} // Close when clicking outside
-          >
-            {/* Modal Content Box */}
-            <motion.div 
-              initial={{ scale: 0.95, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              // --- FIX IS HERE: Restricted height to 80vh to guarantee it stays perfectly centered ---
-              className="relative w-full max-w-5xl bg-white rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden max-h-[80vh] md:max-h-[75vh]"
-              onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside the box
-            >
-              
-              {/* Close Button */}
-              <button 
-                onClick={() => setSelectedItem(null)} 
-                className="absolute top-3 right-3 md:top-4 md:right-4 w-10 h-10 bg-white hover:bg-red-500 hover:text-white text-gray-800 shadow-md border border-gray-100 rounded-full flex items-center justify-center z-50 transition-all text-xl font-bold"
-              >
-                ×
-              </button>
-
-              {/* LEFT SIDE: Image Container */}
-              <div className="w-full md:w-1/2 bg-gray-50 flex items-center justify-center relative min-h-[250px] md:min-h-0 flex-shrink-0 border-b md:border-b-0 md:border-r border-gray-200">
-                <img 
-                  src={selectedItem.url} 
-                  alt={selectedItem.name} 
-                  className="absolute inset-0 w-full h-full object-contain p-4" 
-                />
-              </div>
-
-              {/* RIGHT SIDE: Machine Details */}
-              <div className="w-full md:w-1/2 p-6 md:p-10 overflow-y-auto custom-scrollbar">
-                <span className="text-red-600 font-bold tracking-widest text-xs uppercase mb-2 block">
-                  {selectedItem.category}
-                </span>
-                
-                <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-4 leading-tight pr-8">
-                  {selectedItem.productData.name}
-                </h2>
-                
-                <p className="text-gray-600 mb-8 text-sm leading-relaxed">
-                  {selectedItem.productData.desc}
-                </p>
-
-                {/* Features (if they exist) */}
-                {selectedItem.productData.features && (
-                  <div className="mb-8">
-                    <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider text-xs border-b pb-2">
-                      Key Features
-                    </h4>
-                    <ul className="space-y-3">
-                      {selectedItem.productData.features.map((feature, i) => (
-                        <li key={i} className="flex gap-3 text-sm text-gray-700 items-start">
-                          <span className="text-red-500 font-bold mt-0.5">✔</span>
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {/* Video section (if it exists) */}
-                {selectedItem.productData.video && (
-                  <div className="mt-8 pb-4">
-                    <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider text-xs border-b pb-2">
-                      Machine Overview Video
-                    </h4>
-                    {/* Check if the video is a YouTube embed link or a local .mp4 file */}
-                    {selectedItem.productData.video.includes("youtube.com") ? (
-                      <div className="aspect-video w-full rounded-xl overflow-hidden shadow-md">
-                        <iframe
-                          className="w-full h-full"
-                          src={selectedItem.productData.video}
-                          title={selectedItem.productData.name}
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        ></iframe>
-                      </div>
-                    ) : (
-                      <div className="aspect-video w-full rounded-xl overflow-hidden shadow-md bg-black">
-                        <video
-                          controls
-                          className="w-full h-full object-cover"
-                          src={selectedItem.productData.video}
-                        >
-                          Your browser does not support the video tag.
-                        </video>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
