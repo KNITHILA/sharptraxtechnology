@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Send, Zap, Shield, PlayCircle, ArrowRight, X, ChevronRight, Settings2 } from "lucide-react";
+import { CheckCircle2, Send, Zap, PlayCircle, ArrowRight, X, ChevronRight, Settings2 } from "lucide-react";
 
 // --- TYPESCRIPT INTERFACES ---
 interface Product {
